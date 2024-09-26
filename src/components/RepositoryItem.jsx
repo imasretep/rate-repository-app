@@ -1,0 +1,82 @@
+import { View, StyleSheet, Image } from 'react-native';
+import Text from './Text';
+import theme from '../theme';
+import RepositoryItemStat from './RepositoryItemStat';
+
+const Repositoryitem = ({ data }) => {
+
+  const styles = StyleSheet.create({
+    container: {
+      backgroundColor: "white",
+      marginBottom: 10,
+    },
+    containerInfo: {
+      padding: 10,
+      marginBottom: 10,
+    },
+    image: {
+      width: 50,
+      height: 50,
+      borderRadius: 5,
+      marginRight: 10,
+    },
+    containerFlex: {
+      display: "flex",
+      justifyContent: "flex-start",
+      flexDirection: "row",
+      alignItems: "flex-start",
+    },
+    containerText: {
+      flexShrink: 1,
+    },
+    containerStats: {
+      display: "flex",
+      justifyContent: "space-around",
+      flexDirection: "row",
+      marginBottom: 10,
+    },
+    langueageTag: {
+      backgroundColor: theme.colors.primary,
+      paddingVertical: 4,
+      paddingHorizontal: 8,
+      borderRadius: 4,
+      alignSelf: 'flex-start',
+      marginTop: 5,
+      marginBottom: 10,
+    },
+    tagText: {
+      color: theme.colors.textAppBar,
+    }
+
+  });
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.containerInfo}>
+        <View style={styles.containerFlex}>
+          <Image source={{ uri: data.ownerAvatarUrl }} style={styles.image} />
+
+          <View style={styles.containerText}>
+            <Text fontWeight={'bold'}>{data.fullName}</Text>
+            <Text color={'textSecondary'}>{data.description}</Text>
+
+            <View style={styles.langueageTag}>
+              <Text style={styles.tagText}>{data.language}</Text>
+            </View>
+
+          </View>
+        </View>
+      </View>
+
+
+      <View style={styles.containerStats}>
+        <RepositoryItemStat data={data.forksCount} text={"Forks"} />
+        <RepositoryItemStat data={data.stargazersCount} text={"Stars"} />
+        <RepositoryItemStat data={data.ratingAverage} text={"Rating"} />
+        <RepositoryItemStat data={data.reviewCount} text={"Reviews"} />
+      </View>
+    </View>
+  )
+}
+
+export default Repositoryitem;
