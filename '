@@ -2,7 +2,7 @@ import { Text as TabText, StyleSheet, Pressable } from 'react-native';
 import { Link } from "react-router-native";
 import theme from '../theme';
 import { useApolloClient } from '@apollo/client';
-import useAuthStorage from '../hooks/useAuthStorage';
+import authStorage from '../utils/authStorage';
 
 const styles = StyleSheet.create({
   text: {
@@ -16,17 +16,17 @@ const styles = StyleSheet.create({
 
 
 const AppBarTab = ({ tabName, route }) => {
+  console.log(tabName);
   const apolloClient = useApolloClient();
-  const authStorage = useAuthStorage();
-
-  const onPress = async () => {
-    await authStorage.removeAccessToken();
+  const onPress = () => {
+    console.log("LogOut happened");
+    authStorage.removeAccessToken();
     apolloClient.resetStore();
   };
 
   return (
-    <Pressable >
-      <Link to={route} onPress={tabName === "Sign out" ? onPress : null}>
+    <Pressable onPress={tabName === "Sign out" ? onPress : null}>
+      <Link to={route}>
         <TabText style={styles.text}>{tabName}</TabText>
       </Link>
     </Pressable>

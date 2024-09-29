@@ -3,10 +3,12 @@ import Text from './Text';
 import { useFormik } from 'formik';
 import theme from '../theme';
 import * as yup from 'yup';
-
+import { useSignIn } from '../hooks/useSignIn';
+import { useNavigate } from "react-router-native";
 
 const SignIn = () => {
-
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
 
   const styles = StyleSheet.create({
     container: {
@@ -52,8 +54,16 @@ const SignIn = () => {
   });
 
 
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    try {
+      const { data } = await signIn({ username, password })
+      if (data.authenticate) {
+        navigate("/repositories");
+      }
+    } catch (error) {
+      console.log("SignIn.jsx", error);
+    }
   };
 
   const formik = useFormik({
