@@ -1,6 +1,7 @@
 import Constants from 'expo-constants';
 import { StyleSheet, View } from 'react-native';
 import RepositoryList from './RepositoryList';
+import RepositoryItem from "./RepositoryItem.jsx"
 import AppBar from './AppBar';
 import SignIn from './SignIn';
 import theme from '../theme';
@@ -20,9 +21,10 @@ const Main = () => {
     <View style={styles.container}>
       <AppBar />
       <Routes>
+        <Route path="/repository/:id" element={<RepositoryItem data={null} showButton={true} />} />
         <Route path="/repositories" element={<RepositoryList />} />
         <Route path="/" element={<SignIn />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </View>
   );

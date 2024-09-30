@@ -1,9 +1,21 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, Pressable } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
 import RepositoryItemStat from './RepositoryItemStat';
+import useRepository from '../hooks/useRepository';
+import { useParams } from 'react-router-native';
+import * as Linking from 'expo-linking';
 
-const Repositoryitem = ({ data }) => {
+const RepositoryItem = ({ data, showButton }) => {
+  const { id } = useParams();
+  const repository = useRepository(id);
+
+  if (data === null) {
+    if (repository.loading) {
+      return <Text>Loading...</Text>
+    }
+    data = repository?.data?.repository;
+  }
 
   const styles = StyleSheet.create({
     container: {
@@ -46,12 +58,26 @@ const Repositoryitem = ({ data }) => {
     },
     tagText: {
       color: theme.colors.textAppBar,
-    }
-
+    },
+    button: {
+      backgroundColor: theme.colors.primary,
+      paddingVertical: 12,
+      paddingHorizontal: 12,
+      borderRadius: 2,
+      alignSelf: 'stretch',
+      marginTop: 5,
+      marginBottom: 10,
+      marginLeft: 5,
+      marginRight: 5,
+    },
+    buttonText: {
+      color: theme.colors.textAppBar,
+      textAlign: "center",
+    },
   });
 
   return (
-    <View style={styles.container}>
+    <View testID='repositoryItem' style={styles.container}>
       <View style={styles.containerInfo}>
         <View style={styles.containerFlex}>
           <Image source={{ uri: data.ownerAvatarUrl }} style={styles.image} />
@@ -75,8 +101,18 @@ const Repositoryitem = ({ data }) => {
         <RepositoryItemStat data={data.ratingAverage} text={"Rating"} />
         <RepositoryItemStat data={data.reviewCount} text={"Reviews"} />
       </View>
+
+      {showButton ?
+        <View>
+          <Pressable onPress={() => Linking.openURL(`${data.url}`)} style={styles.button}>
+            <Text fontWeight={"bold"} style={styles.buttonText}>
+              Open in GitHub
+            </Text>
+          </Pressable>
+        </View>
+        : null}
     </View>
   )
 }
 
-export default Repositoryitem;
+export default RepositoryItem;

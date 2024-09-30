@@ -6,10 +6,7 @@ import * as yup from 'yup';
 import { useSignIn } from '../hooks/useSignIn';
 import { useNavigate } from "react-router-native";
 
-const SignIn = () => {
-  const [signIn] = useSignIn();
-  const navigate = useNavigate();
-
+export const SignInContainer = ({ onSubmit }) => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: "white",
@@ -37,34 +34,20 @@ const SignIn = () => {
       alignSelf: 'stretch',
       marginTop: 5,
       marginBottom: 10,
-
     },
     buttonText: {
       color: theme.colors.textAppBar,
       textAlign: "center",
     },
     error: {
-      color: "#d73a4a"
-    }
+      color: "#d73a4a",
+    },
   });
 
   const validationSchema = yup.object().shape({
     username: yup.string().min(4, "Username must be 4 or more characters long").required("Username is required"),
     password: yup.string().min(4, "Password must be 4 or more characters long").required("Password is required"),
   });
-
-
-  const onSubmit = async (values) => {
-    const { username, password } = values;
-    try {
-      const { data } = await signIn({ username, password })
-      if (data.authenticate) {
-        navigate("/repositories");
-      }
-    } catch (error) {
-      console.log("SignIn.jsx", error);
-    }
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -81,7 +64,8 @@ const SignIn = () => {
         style={styles.inputField}
         placeholder="username"
         value={formik.values.username}
-        onChangeText={formik.handleChange("username")} />
+        onChangeText={formik.handleChange("username")}
+      />
       {formik.touched.username && formik.errors.username && (
         <Text style={styles.error}>{formik.errors.username}</Text>
       )}
@@ -91,16 +75,39 @@ const SignIn = () => {
         secureTextEntry={true}
         placeholder="password"
         value={formik.values.password}
-        onChangeText={formik.handleChange("password")} />
+        onChangeText={formik.handleChange("password")}
+      />
       {formik.touched.password && formik.errors.password && (
         <Text style={styles.error}>{formik.errors.password}</Text>
       )}
 
-
       <Pressable onPress={formik.handleSubmit} style={styles.button}>
-        <Text fontWeight={"bold"} style={styles.buttonText}>Sign-in</Text>
+        <Text fontWeight={"bold"} style={styles.buttonText}>
+          Sign-in
+        </Text>
       </Pressable>
     </View>
+  );
+};
+
+const SignIn = () => {
+  const [signIn] = useSignIn();
+  const navigate = useNavigate();
+
+  const onSubmit = async (values) => {
+    const { username, password } = values;
+    try {
+      const { data } = await signIn({ username, password })
+      if (data.authenticate) {
+        navigate("/repositories");
+      }
+    } catch (error) {
+      console.log("SignIn.jsx", error);
+    }
+  };
+
+  return (
+    <SignInContainer onSubmit={onSubmit} />
   )
 };
 

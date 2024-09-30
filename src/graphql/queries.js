@@ -30,3 +30,20 @@ query me{
 `;
 
 
+export const GET_REPOSITORY = gql`
+  query GetRepository($id: ID!) {
+    repository(id: $id) {
+      id
+      fullName
+      url
+      ownerAvatarUrl
+      description
+      language
+      stargazersCount
+      forksCount
+      ratingAverage
+      reviewCount
+    }
+  }
+`;
+
