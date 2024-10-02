@@ -1,22 +1,9 @@
-import { View, StyleSheet, Image, Pressable } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import Text from './Text';
 import theme from '../theme';
 import RepositoryItemStat from './RepositoryItemStat';
-import useRepository from '../hooks/useRepository';
-import { useParams } from 'react-router-native';
-import * as Linking from 'expo-linking';
 
-const RepositoryItem = ({ data, showButton }) => {
-  const { id } = useParams();
-  const repository = useRepository(id);
-
-  if (data === null) {
-    if (repository.loading) {
-      return <Text>Loading...</Text>
-    }
-    data = repository?.data?.repository;
-  }
-
+const RepositoryItem = ({ data }) => {
   const styles = StyleSheet.create({
     container: {
       backgroundColor: "white",
@@ -94,24 +81,14 @@ const RepositoryItem = ({ data, showButton }) => {
         </View>
       </View>
 
-
       <View style={styles.containerStats}>
         <RepositoryItemStat data={data.forksCount} text={"Forks"} />
         <RepositoryItemStat data={data.stargazersCount} text={"Stars"} />
         <RepositoryItemStat data={data.ratingAverage} text={"Rating"} />
         <RepositoryItemStat data={data.reviewCount} text={"Reviews"} />
       </View>
-
-      {showButton ?
-        <View>
-          <Pressable onPress={() => Linking.openURL(`${data.url}`)} style={styles.button}>
-            <Text fontWeight={"bold"} style={styles.buttonText}>
-              Open in GitHub
-            </Text>
-          </Pressable>
-        </View>
-        : null}
     </View>
+
   )
 }
 
