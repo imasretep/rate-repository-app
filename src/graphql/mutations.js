@@ -5,5 +5,22 @@ export const LOGIN = gql`
   authenticate(credentials: { username: $username, password: $password }) {
     accessToken
   }
-}
-`;
+}`;
+
+export const CREATE_REVIEW = gql`
+  mutation CreateReview($review: CreateReviewInput) {
+  createReview(review: $review) {
+    id
+    repositoryId
+    repository {
+      ownerName,
+      name
+    }
+    createdAt,
+    rating,
+    text,
+    user {
+      username
+    }
+  }
+}`;

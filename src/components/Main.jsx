@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import RepositoryList from './RepositoryList';
 import AppBar from './AppBar';
 import SignIn from './SignIn';
+import ReviewForm from './ReviewForm.jsx';
 import theme from '../theme';
 import { Route, Routes, Navigate } from 'react-router-native';
 import SingleRepository from './SingleRepository.jsx';
@@ -19,6 +20,7 @@ const Main = () => {
     <View style={styles.container}>
       <AppBar />
       <Routes>
+        <Route path="/review" element={<ReviewForm />} />
         <Route path="/repository/:id" element={<SingleRepository />} />
         <Route path="/repositories" element={<RepositoryList />} />
         <Route path="/" element={<SignIn />} />
