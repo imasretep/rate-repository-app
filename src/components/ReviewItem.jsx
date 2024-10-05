@@ -4,6 +4,11 @@ import theme from '../theme';
 
 const ReviewItem = ({ review }) => {
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("fi-FI");
+  };
+
   console.log("ReviewItem", review.node.user.username);
   const styles = StyleSheet.create({
     container: {
@@ -15,16 +20,17 @@ const ReviewItem = ({ review }) => {
       marginBottom: 10,
     },
     reviewContainer: {
-      width: 60,
-      height: 60,
-      borderRadius: 30,
+      width: 56,
+      height: 56,
+      borderRadius: 28,
       borderWidth: 2,
       borderColor: theme.colors.primary,
       justifyContent: 'center',
       alignItems: 'center',
+      marginRight: 10,
     },
     reviewStyle: {
-      fontSize: 25,
+      fontSize: 20,
       color: theme.colors.primary,
     },
     containerInfo: {
@@ -47,12 +53,12 @@ const ReviewItem = ({ review }) => {
       <View style={styles.containerInfo}>
         <View style={styles.containerFlex}>
           <View style={styles.reviewContainer}>
-            <Text style={styles.reviewStyle}>{review.node.rating}</Text>
+            <Text fontWeight={"bold"} style={styles.reviewStyle}>{review.node.rating}</Text>
           </View>
 
           <View style={styles.containerText}>
             <Text fontWeight={"bold"}>{review.node.user.username}</Text>
-            <Text color={'textSecondary'}>{review.node.createdAt}</Text>
+            <Text color={'textSecondary'}>{formatDate(review.node.createdAt)}</Text>
             <Text>{review.node.text}</Text>
           </View>
 
