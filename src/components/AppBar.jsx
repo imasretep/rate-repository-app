@@ -33,6 +33,7 @@ const AppBar = () => {
         <AppBarTab tabName={"Repositories"} route={"/repositories"} />
         {data.me === null ? null : <AppBarTab tabName={"Create a review"} route={"/review"} />}
         <AppBarTab tabName={data.me === null ? "Sign in" : "Sign out"} route={"/"} />
+        {data.me === null ? <AppBarTab tabName={"Sign up"} route={"/signup"} /> : null}
       </ScrollView>
     </View>
   );
