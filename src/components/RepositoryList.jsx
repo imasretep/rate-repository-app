@@ -3,12 +3,22 @@ import RepositoryItem from './RepositoryItem';
 import useRepositories from '../hooks/useRepositories';
 import Text from './Text';
 import { useNavigate } from 'react-router-native';
-import { Menu, Button } from 'react-native-paper';
+import { Menu, Button, Searchbar } from 'react-native-paper';
 import { useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 const styles = StyleSheet.create({
   separator: {
     height: 10,
+  },
+
+  searchBar: {
+    marginTop: 10,
+  },
+
+  background: {
+    backgroundColor: "white",
+    marginBottom: 20,
   },
 });
 
@@ -48,7 +58,7 @@ const OrderByMenu = ({ setOrderBy, setOrderDirection }) => {
   );
 };
 
-export const RepositoryListContainer = ({ repositories, setOrderBy, setOrderDirection }) => {
+export const RepositoryListContainer = ({ repositories, setOrderBy, setOrderDirection, setSearchText, searchText }) => {
   const navigate = useNavigate();
   const repositoryNodes = repositories
     ? repositories.edges.map((edge) => edge.node)
@@ -63,7 +73,20 @@ export const RepositoryListContainer = ({ repositories, setOrderBy, setOrderDire
         <Pressable onPress={() => navigate(`/repository/${item.id}`)}>
           <RepositoryItem data={item} showButton={false} />
         </Pressable>}
-      ListHeaderComponent={<OrderByMenu setOrderBy={setOrderBy} setOrderDirection={setOrderDirection} />}
+      ListHeaderComponent={
+        <View style={styles.background}>
+          <Searchbar
+            style={styles.searchBar}
+            placeholder="search"
+            onChangeText={setSearchText}
+            value={searchText}
+          />
+
+          <OrderByMenu
+            setOrderBy={setOrderBy}
+            setOrderDirection={setOrderDirection} />
+        </View>
+      }
     />
   );
 };
@@ -71,7 +94,14 @@ export const RepositoryListContainer = ({ repositories, setOrderBy, setOrderDire
 const RepositoryList = () => {
   const [orderDirection, setOrderDirection] = useState("DESC");
   const [orderBy, setOrderBy] = useState("CREATED_AT");
-  const { data, error, loading } = useRepositories(orderBy, orderDirection);
+  const [searchText, setSearchText] = useState("");
+  const [debounceSearchText] = useDebounce(searchText, 500);
+
+  const { data, error, loading } = useRepositories({
+    orderBy,
+    orderDirection,
+    searchKeyword: debounceSearchText,
+  });
 
   console.log(orderBy);
   if (loading) {
@@ -85,7 +115,12 @@ const RepositoryList = () => {
   const repositories = data?.repositories;
 
   return (
-    <RepositoryListContainer repositories={repositories} setOrderBy={setOrderBy} setOrderDirection={setOrderDirection} />
+    <RepositoryListContainer
+      repositories={repositories}
+      setOrderBy={setOrderBy}
+      setOrderDirection={setOrderDirection}
+      setSearchText={setSearchText}
+      searchText={searchText} />
   );
 };
 
