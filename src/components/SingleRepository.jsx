@@ -41,7 +41,7 @@ const RepositoryInfo = ({ repository }) => {
   return (
     <View style={styles.container}>
       <RepositoryItem data={repository} />
-      <Pressable onPress={() => Linking.openURL(`${data.url}`)} style={styles.button}>
+      <Pressable onPress={() => Linking.openURL(`${repository.url}`)} style={styles.button}>
         <Text fontWeight={"bold"} style={styles.buttonText}>
           Open in GitHub
         </Text>
@@ -58,7 +58,7 @@ const SingleRepository = () => {
   if (repository.loading) {
     return <Text>Loading...</Text>
   }
-  data = repository?.data?.repository;
+  const data = repository?.data?.repository;
   return (
     <FlatList
       data={data.reviews.edges}

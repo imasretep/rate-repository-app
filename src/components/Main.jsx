@@ -7,6 +7,7 @@ import theme from '../theme';
 import { Route, Routes, Navigate } from 'react-router-native';
 import SingleRepository from './SingleRepository.jsx';
 import SignUp from './SignUp.jsx';
+import UserReview from './UserReview.jsx';
 
 const styles = StyleSheet.create({
   container: {
@@ -21,6 +22,7 @@ const Main = () => {
     <View style={styles.container}>
       <AppBar />
       <Routes>
+        <Route path="/userreviews" element={<UserReview/>} />
         <Route path="/review" element={<ReviewForm />} />
         <Route path="/repository/:id" element={<SingleRepository />} />
         <Route path="/repositories" element={<RepositoryList />} />

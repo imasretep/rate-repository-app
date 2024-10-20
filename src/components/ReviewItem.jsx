@@ -3,13 +3,15 @@ import Text from './Text';
 import theme from '../theme';
 
 const ReviewItem = ({ review }) => {
+  const data = review.node ? review.node : review;
+
+  console.log("ReviewItem.jsx", data);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString("fi-FI");
   };
 
-  console.log("ReviewItem", review.node.user.username);
   const styles = StyleSheet.create({
     container: {
       backgroundColor: "white",
@@ -33,10 +35,6 @@ const ReviewItem = ({ review }) => {
       fontSize: 20,
       color: theme.colors.primary,
     },
-    containerInfo: {
-      padding: 10,
-      marginBottom: 10,
-    },
     containerFlex: {
       display: "flex",
       justifyContent: "flex-start",
@@ -51,18 +49,18 @@ const ReviewItem = ({ review }) => {
   return (
     <View style={styles.container}>
       <View style={styles.containerInfo}>
-        <View style={styles.containerFlex}>
+      <View style={styles.containerFlex}>
           <View style={styles.reviewContainer}>
-            <Text fontWeight={"bold"} style={styles.reviewStyle}>{review.node.rating}</Text>
+            <Text fontWeight={"bold"} style={styles.reviewStyle}>{data.rating}</Text>
           </View>
 
           <View style={styles.containerText}>
-            <Text fontWeight={"bold"}>{review.node.user.username}</Text>
-            <Text color={'textSecondary'}>{formatDate(review.node.createdAt)}</Text>
-            <Text>{review.node.text}</Text>
+            {data.user?.username ? <Text fontWeight={"bold"}>{data.user.username}</Text> : <Text fontWeight={"bold"}>{data.repository.fullName}</Text>}
+            <Text color={'textSecondary'}>{formatDate(data.createdAt)}</Text>
+            <Text>{data.text}</Text>
           </View>
 
-        </View>
+      </View>
       </View>
     </View>
   )
